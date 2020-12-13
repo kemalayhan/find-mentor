@@ -1,0 +1,7 @@
+:root {
+  --shadow-1: 0 0 24px 0 rgba(0, 0, 0, 0.12);
+}
+
+.dark-mode {
+  --shadow-1: none;
+}

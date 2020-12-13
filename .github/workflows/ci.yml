@@ -1,7 +1,7 @@
 name: SpreadSheet To Site
 on:
   schedule:
-    - cron: '0 */2 * * *'
+    - cron: '0 */5 * * *'
   push:
     branches:
       - master
@@ -45,10 +45,14 @@ jobs:
       - name: Get data from spreadsheet 👨🏻‍💻
         run: yarn data
 
+      - name: Run prettier
+        run: yarn prettier
+
       - name: Create local changes & push to GitHub
         run: |
-          yarn generate
-          echo 'findmentor.network' > ./docs/CNAME
+          yarn build
+          # yarn generate
+          # echo 'findmentor.network' > ./docs/CNAME
           git add .
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"

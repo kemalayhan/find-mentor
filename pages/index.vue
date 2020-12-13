@@ -1,25 +1,88 @@
 <template>
-  <div class="container">
-    <h1><a href="https://github.com/cagataycali/find-mentor" target="_blank">Feel free to contribute!</a></h1>
-    <h2>Exactly this project is 0km.</h2>
-    <h3>Every night & every deploy, the spread sheet will be parsed by GitHub actions, then generate this beauty.</h3>
-    <ul>
-      <li v-for="mentee in mentees" :key="mentee.slug">
-        <NuxtLink :to="mentee.slug">
-          {{ mentee.name }}
-        </NuxtLink>
-      </li>
-    </ul>
+  <div class="page main-page">
+    <header><nuxt-content :document="page" /></header>
+    <div class="container">
+      <hr />
+      <!-- Mentors -->
+      <h2 class="title my-4">
+        <NuxtLink to="/mentors/">👉 Mentors</NuxtLink>
+      </h2>
+      <ul class="persons mentors">
+        <PersonCard
+          v-for="mentor in mentors"
+          :key="mentor.slug"
+          :person="mentor"
+          person-type="mentor"
+        />
+      </ul>
+      <NuxtLink class="float-right" to="/mentors/"
+        >🤳 Click here for all mentors</NuxtLink
+      >
+      <br />
+      <br />
+
+      <!-- Mentees -->
+      <h2 class="title my-4">
+        <NuxtLink to="/mentees/">👉 Mentees</NuxtLink>
+      </h2>
+      <ul class="persons mentees">
+        <PersonCard
+          v-for="mentee in mentees"
+          :key="mentee.slug"
+          :person="mentee"
+          person-type="mentee"
+        />
+      </ul>
+      <NuxtLink class="float-right" to="/mentees/"
+        >🤳 Click here for all mentees</NuxtLink
+      >
+      <br />
+      <br />
+    </div>
   </div>
 </template>
 
 <script>
-
 export default {
-  async asyncData ({ $content, params }) {
-    const mentees = await $content('mentees').fetch()
-    const mentors = await $content('mentors').fetch()
-    return { mentees, mentors }
-  }
+  async asyncData({ $content }) {
+    const [mentors, mentees, page] = await Promise.all([
+      $content('persons')
+        .where({ mentor: { $in: ['Mentor', 'İkisi de'] } })
+        .sortBy('', 'desc')
+        .limit(16)
+        .fetch(),
+      $content('persons')
+        .where({ mentor: { $in: ['Mentee', 'İkisi de'] } })
+        .sortBy('', 'desc')
+        .limit(16)
+        .fetch(),
+      $content('readme').fetch(),
+    ])
+    return {
+      mentors,
+      mentees,
+      page,
+    }
+  },
 }
 </script>
+
+<style lang="scss">
+.main-page {
+  header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 80px 0px;
+  }
+  .contrib {
+    text-decoration: underline;
+    text-decoration-color: dodgerblue;
+  }
+  .information {
+    padding: 10px;
+    font-size: 16px;
+  }
+}
+</style>

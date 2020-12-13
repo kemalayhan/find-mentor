@@ -1,0 +1,20 @@
+// General
+@charset "UTF-8";
+
+::-moz-selection {
+  color: #fff;
+  background: #444;
+}
+
+::selection {
+  color: #fff;
+  background: #444;
+}
+/* stylelint-enable */
+
+html,
+body {
+  background-color: var(--color-ui-01);
+  color: var(--color-text-03);
+  // @include roboto-regular;
+}
